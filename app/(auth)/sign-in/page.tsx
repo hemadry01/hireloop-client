@@ -1,5 +1,6 @@
 "use client"
 
+import { authClient } from "@/lib/auth-client";
 import {
   Button,
   Description,
@@ -11,9 +12,25 @@ import {
 } from "@heroui/react"
 
 const SignInPage = () => {
+  const handeOnSubmit = async(e:React.FormEvent<HTMLFormElement>) =>{
+      e.preventDefault();
+
+      const formData = new FormData(e.currentTarget);
+      const user = Object.fromEntries(formData.entries()) as {
+        email: string
+        password: string
+      }
+
+      const { data, error } = await authClient.signIn.email({
+       ...user,
+        rememberMe: true, 
+        callbackURL: "/"
+      })
+  }
   return (
     <main className="flex min-h-screen w-full items-center justify-center bg-transparent px-4 py-10 sm:px-6">
       <Form
+      onSubmit={handeOnSubmit}
         className="flex w-full max-w-md flex-col gap-5 rounded-2xl border border-white/10 bg-[#161616] p-5 shadow-2xl sm:p-8"
         render={(props) => <form {...props} />}
       >

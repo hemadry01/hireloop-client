@@ -4,6 +4,15 @@ import { mongodbAdapter } from "@better-auth/mongo-adapter"
 const client = new MongoClient(process.env.BETTER_AUTH_DB_URL as string)
 const db = client.db('hireloopbd')
 export const auth = betterAuth({
+
+   user: {
+       additionalFields: {
+          role: {
+              type: ["seeker",'recruiter','admn'],
+              input: false
+            } 
+        }
+    },
   emailAndPassword: {
     enabled: true,
   },
