@@ -1,29 +1,21 @@
-
 import Navbar from "@/components/Navbar"
-import { Button } from "@/components/ui/button"
+import HeroPage from "@/components/Hero"
+import HeroBg from "@/app/assets/globe.png"
 
 export default function Page() {
   return (
-    <div className="min-h-svh">
-      <Navbar />
+    <main
+      className="relative min-h-svh bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: `url(${HeroBg.src})` }}
+    >
+      {/* Dark Overlay */}
+      <div className="absolute inset-0 bg-black/50" />
 
-      <div className="p-6">
-        <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-          <div>
-            <h1 className="font-medium">Project ready!</h1>
-
-            <p>You may now add components and start building.</p>
-
-            <p>We&apos;ve already added the button component for you.</p>
-
-            <Button className="mt-2">Button</Button>
-          </div>
-
-          <div className="font-mono text-xs text-muted-foreground">
-            (Press <kbd>d</kbd> to toggle dark mode)
-          </div>
-        </div>
+      {/* Page Content */}
+      <div className="relative z-10">
+        <Navbar />
+        <HeroPage />
       </div>
-    </div>
+    </main>
   )
 }
