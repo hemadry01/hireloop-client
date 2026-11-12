@@ -1,4 +1,3 @@
-import Navbar from "@/components/Navbar"
 import HeroPage from "@/components/Hero"
 import HeroBg from "@/app/assets/globe.png"
 
@@ -13,7 +12,6 @@ export default function Page() {
 
       {/* Page Content */}
       <div className="relative z-10">
-        <Navbar />
         <HeroPage />
       </div>
     </main>
