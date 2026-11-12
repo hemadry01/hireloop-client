@@ -32,6 +32,7 @@ const SignUpPage = () => {
     const user = {
       name: String(formData.get("name") ?? "").trim(),
       email: String(formData.get("email") ?? "").trim(),
+      role: String(formData.get("role") ?? "seeker"),
       password: String(formData.get("password") ?? ""),
     }
 
@@ -42,12 +43,15 @@ const SignUpPage = () => {
       })
 
       if (error) {
-        setSubmitError(error.message ?? "Something went wrong. Please try again.")
+        setSubmitError(
+          error.message ?? "Something went wrong. Please try again."
+        )
         return
       }
 
       if (data) {
         router.replace("/")
+        console.log("User Login Successful",data)
       }
     } catch {
       setSubmitError("Something went wrong. Please try again.")
@@ -115,6 +119,22 @@ const SignUpPage = () => {
 
           <FieldError className="text-sm text-red-400" />
         </TextField>
+
+        {/* Role */}
+        <div className="flex w-full flex-col gap-2">
+          <Label className="text-sm font-medium text-white">Select Role</Label>
+
+          <select
+            name="role"
+            defaultValue="seeker"
+            required
+            className="w-full rounded-lg border border-white/15 bg-[#242424] px-3 py-3 text-sm text-white outline-none focus:border-[#5b4dfb]"
+          >
+            <option value="seeker">Seeker</option>
+            <option value="recruiter">Recruiter</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
 
         {/* Password */}
         <TextField
