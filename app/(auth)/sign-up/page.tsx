@@ -1,6 +1,7 @@
 "use client"
 
 import React from "react"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { authClient } from "@/lib/auth-client"
 
@@ -29,31 +30,37 @@ const SignUpPage = () => {
 
     const formData = new FormData(e.currentTarget)
 
-    const user = {
+    const role = (String(formData.get("role") ?? "seeker") as
+      | "seeker"
+      | "recruiter"
+      | "admin")
+
+    const userData = {
       name: String(formData.get("name") ?? "").trim(),
       email: String(formData.get("email") ?? "").trim(),
-      role: String(formData.get("role") ?? "seeker"),
+      role,
       password: String(formData.get("password") ?? ""),
     }
 
     try {
       const { data, error } = await authClient.signUp.email({
-        ...user,
+        ...userData,
         callbackURL: "/",
       })
 
       if (error) {
         setSubmitError(
-          error.message ?? "Something went wrong. Please try again."
+          error.message || "Something went wrong. Please try again."
         )
         return
       }
 
       if (data) {
+        console.log("User Signup Successful", data)
         router.replace("/")
-        console.log("User Login Successful",data)
       }
-    } catch {
+    } catch (error) {
+      console.error("Signup Error:", error)
       setSubmitError("Something went wrong. Please try again.")
     } finally {
       setIsLoading(false)
@@ -91,6 +98,7 @@ const SignUpPage = () => {
           <Label className="text-sm font-medium text-white">Full Name</Label>
 
           <Input
+            name="name"
             placeholder="John Doe"
             className="w-full rounded-lg border border-white/15 bg-[#242424] px-3 py-3 text-sm text-white outline-none placeholder:text-neutral-500 focus:border-[#5b4dfb]"
           />
@@ -113,6 +121,8 @@ const SignUpPage = () => {
           <Label className="text-sm font-medium text-white">Email</Label>
 
           <Input
+            name="email"
+            type="email"
             placeholder="john@example.com"
             className="w-full rounded-lg border border-white/15 bg-[#242424] px-3 py-3 text-sm text-white outline-none placeholder:text-neutral-500 focus:border-[#5b4dfb]"
           />
@@ -161,6 +171,7 @@ const SignUpPage = () => {
 
           <div className="relative w-full">
             <Input
+              name="password"
               type={showPassword ? "text" : "password"}
               placeholder="Enter your password"
               className="w-full rounded-lg border border-white/15 bg-[#242424] px-3 py-3 pr-16 text-sm text-white outline-none placeholder:text-neutral-500 focus:border-[#5b4dfb]"
@@ -189,7 +200,7 @@ const SignUpPage = () => {
           </p>
         )}
 
-        {/* Create Account Button */}
+        {/* Submit Button */}
         <Button
           type="submit"
           isDisabled={isLoading}
@@ -201,12 +212,12 @@ const SignUpPage = () => {
         {/* Sign In Link */}
         <p className="text-center text-sm text-neutral-400">
           Already have an account?{" "}
-          <a
+          <Link
             href="/sign-in"
             className="font-medium text-[#5b4dfb] hover:underline"
           >
             Sign In
-          </a>
+          </Link>
         </p>
       </Form>
     </main>

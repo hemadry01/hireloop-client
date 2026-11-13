@@ -5,15 +5,26 @@ import Image from "next/image"
 import Link from "next/link"
 import { Menu, X } from "lucide-react"
 import Logo from "../app/assets/logo.png"
+import { authClient, useSession } from "@/lib/auth-client"
+import { Button } from "@base-ui/react"
 
-const NAV_LINKS = [
-  { name: "Browse Jobs", href: "/browse-jobs" },
-  { name: "Company", href: "/company" },
-  { name: "Pricing", href: "/pricing" },
-]
+
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const {data:session} = useSession();
+  const user = session?.user;
+
+  const NAV_LINKS = [
+    { name: "Browse Jobs", href: "/browse-jobs" },
+    { name: "Company", href: "/company" },
+    { name: "Pricing", href: "/pricing" },
+    { name: "Dashboard", href: `/dashboard/${user?.role || 'seeker'}` },
+  ]
+
+  const handleSignOut = async() =>{
+    await authClient.signOut()
+  }
 
   return (
     <header className="relative z-50 w-full border-b border-white/10 bg-[#1c1c1f]">
@@ -44,22 +55,33 @@ export default function Navbar() {
               </li>
             ))}
           </ul>
-
           <span className="h-6 w-px bg-white/15" />
-
-          <Link
-            href="/sign-in"
-            className="text-sm font-medium text-neutral-300 hover:text-white"
-          >
-            Sign In
-          </Link>
-
-          <Link
-            href="/sign-up"
-            className="rounded-md bg-[#3b82f6] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#2563eb]"
-          >
-            Get Started
-          </Link>
+          {user ? (
+            <>
+              <span className="text-[#EDEDEF]">Welcome, {user?.name}!</span>
+              <Button
+                onClick={handleSignOut}
+                className="h-[38px] rounded-[8px] bg-transparent px-4 text-lg font-semibold text-[#645AFF] hover:bg-white/5 hover:text-[#645AFF]"
+              >
+                Sign Out
+              </Button>
+            </>
+          ) : (
+            <>
+              <Link
+                href="/sign-in"
+                className="text-sm font-medium text-neutral-300 hover:text-white"
+              >
+                Sign In
+              </Link>
+              <Link
+                href="/sign-up"
+                className="rounded-md bg-[#3b82f6] px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-[#2563eb]"
+              >
+                Get Started
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile Toggle */}
