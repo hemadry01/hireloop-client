@@ -5,7 +5,8 @@ import { cn } from "@/lib/utils"
 import { Eye, Pencil, Plus, Users } from "lucide-react"
 import type { JobFormData } from "@/app/dashboard/recruiter/jobs/new/page"
 import { getJobs } from "@/lib/api/job"
-//import { DeleteJobDialog } from "@/app/components/DeleteJobDialog"
+import { DeleteJobDialog } from "@/app/components/DeleteJobDialog"
+
 
 type JobStatus = "active" | "expired"
 
@@ -256,7 +257,7 @@ export default async function RecruiterJobsPage() {
                       >
                         <Pencil aria-hidden className="size-4" />
                       </button>
-                      {/* <DeleteJobDialog job={job}></DeleteJobDialog> */}
+                      <DeleteJobDialog job={job}></DeleteJobDialog>
                     </div>
                   </td>
                 </tr>
