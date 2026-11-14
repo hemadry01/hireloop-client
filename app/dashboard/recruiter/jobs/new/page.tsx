@@ -20,7 +20,11 @@ import { Textarea } from "@/components/ui/textarea"
 import { Briefcase, Calendar, MapPin } from "lucide-react"
 import { createJob } from "@/lib/actions/jobs"
 
+import { toast } from "@/components/ui/toast"
+import { useRouter } from "next/navigation"
+
 type JobType = "full-time" | "part-time" | "contract" | "internship"
+export type JobStatus = "active" | "expired"
 
 export type JobFormData = {
   title: string
@@ -35,6 +39,8 @@ export type JobFormData = {
   salaryFrequency: string
   responsibilities: string
   requirements: string
+  applicants: number
+  status: JobStatus
 }
 
 const JOB_CATEGORIES = [
@@ -73,6 +79,7 @@ const sectionBulletClass =
   "flex size-7 items-center justify-center rounded-lg bg-[#5C53FE]/15 text-sm font-semibold text-[#8B85FF]"
 
 export default function NewJobPage() {
+  const router = useRouter()
   const [form, setForm] = useState<JobFormData>({
     title: "",
     companyName: "",
@@ -86,6 +93,8 @@ export default function NewJobPage() {
     salaryFrequency: "per hour",
     responsibilities: "",
     requirements: "",
+    applicants:0,
+    status:"active",
   })
 
   const set =
@@ -98,6 +107,7 @@ export default function NewJobPage() {
     }
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    
     event.preventDefault()
 
     const jobData: JobFormData = { ...form }
@@ -106,7 +116,15 @@ export default function NewJobPage() {
 
     // TODO: Connect your backend.
     const result = await createJob(jobData);
-    console.log(result);
+    if(result.insertedId){
+      console.log(result);
+      toast.add({
+        title: "Job created",
+        description: "The job has been successfully create",
+      })
+
+      router.push('/dashboard/recruiter/jobs');
+    }
   }
 
   return (

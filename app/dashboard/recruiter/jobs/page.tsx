@@ -3,17 +3,14 @@ import Link from "next/link"
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { Eye, Pencil, Plus, Users } from "lucide-react"
-import type { JobFormData } from "@/app/dashboard/recruiter/jobs/new/page"
+import type { JobFormData, JobStatus } from "@/app/dashboard/recruiter/jobs/new/page"
 import { getJobs } from "@/lib/api/job"
 import { DeleteJobDialog } from "@/app/components/DeleteJobDialog"
 
 
-type JobStatus = "active" | "expired"
 
 export type JobRow = JobFormData & {
   _id: string
-  applicants: number
-  status: JobStatus
   posted: string
 }
 
