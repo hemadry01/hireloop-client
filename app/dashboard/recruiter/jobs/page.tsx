@@ -3,16 +3,17 @@ import Link from "next/link"
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { Eye, Pencil, Plus, Users } from "lucide-react"
-import type { JobFormData, JobStatus } from "@/app/dashboard/recruiter/jobs/new/page"
+import type { JobFormData} from "@/app/dashboard/recruiter/jobs/new/page"
 import { getJobs } from "@/lib/api/job"
+import type { JobRow, JobStatus } from "@/lib/types/jobs"
 import { DeleteJobDialog } from "@/app/components/DeleteJobDialog"
 
 
 
-export type JobRow = JobFormData & {
-  _id: string
-  posted: string
-}
+// export type JobRow = JobFormData & {
+//   _id: string
+//   posted: string
+// }
 
 const formatCompensation = (job: JobFormData) =>
   `€${job.minSalary} – €${job.maxSalary} / ${job.salaryFrequency.replace("per ", "")}`
@@ -52,7 +53,7 @@ const headingClass =
 const cellClass = "px-3 py-3.5"
 
 export default async function RecruiterJobsPage() {
-  const jobs: JobRow[] = await getJobs()
+ const jobs: JobRow[] = await getJobs()
 
   console.log(jobs)
 
